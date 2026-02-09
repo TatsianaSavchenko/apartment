@@ -1,14 +1,14 @@
 // ==== 1) МЕССЕНДЖЕРЫ (обязательно) ====
-const TELEGRAM_USERNAME = "your_telegram";   // без @
-const WHATSAPP_PHONE    = "995500000000";    // международный формат, без +
+const TELEGRAM_USERNAME = "tonysav25";   // без @
+const WHATSAPP_PHONE    = "995599688762";    // международный формат, без +
 
 /*
  ==== 2) GOOGLE CALENDAR (обязательно) ====
  1) Calendar ID берётся в настройках календаря → Integrate calendar
  2) Google API key создаётся в Google Cloud Console (Calendar API включён)
 */
-const GOOGLE_CALENDAR_ID  = "your_calendar_id@group.calendar.google.com";
-const GOOGLE_API_KEY      = "your_google_api_key";
+const GOOGLE_CALENDAR_ID  = "0a9238557de26079877d12349a61289eca0a9714d5b562dabe27bbedd80c7212@group.calendar.google.com";
+const GOOGLE_API_KEY      = "AIzaSyB1oewwTojkoc38vKmAfMNufL9lm2fhyTU";
 
 // ==== 3) ЦЕНЫ (опционально) ====
 const CURRENCY = "₾";
@@ -69,3 +69,4 @@ const PHOTOS = [
   // "photos/2.jpg",
   // "photos/3.jpg",
 ];
+
