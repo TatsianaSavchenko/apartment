@@ -1,22 +1,25 @@
 :root{
-  --bg:#0b0d12;
-  --card:#121622;
-  --muted:#a6b0c3;
-  --text:#eef2ff;
-  --accent:#7c5cff;
-  --border:rgba(255,255,255,.08);
-  --danger:#ff5566;
+  --bg:#f6f7fb;              /* общий фон */
+  --card:#ffffff;            /* карточки */
+  --muted:#5b6477;           /* вторичный текст */
+  --text:#111827;            /* основной текст */
+  --accent:#635bff;          /* акцент (кнопки/выделения) */
+  --border:rgba(17,24,39,.10);
+  --danger:#e11d48;          /* занятые даты */
 }
+
 
 *{box-sizing:border-box}
 body{
   margin:0;
   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
-  background: radial-gradient(1200px 700px at 15% 0%, rgba(124,92,255,.18), transparent 60%),
-              radial-gradient(900px 600px at 90% 20%, rgba(76,195,255,.10), transparent 55%),
-              var(--bg);
+  background:
+    radial-gradient(900px 600px at 15% 0%, rgba(99,91,255,.10), transparent 60%),
+    radial-gradient(700px 500px at 90% 20%, rgba(56,189,248,.10), transparent 55%),
+    var(--bg);
   color:var(--text);
 }
+
 
 .wrap{max-width:1100px;margin:0 auto;padding:20px}
 .header{display:flex;gap:16px;justify-content:space-between;align-items:flex-start}
@@ -29,12 +32,13 @@ h1{margin:0;font-size:28px}
 @media (max-width: 940px){ .grid{grid-template-columns:1fr} .right{align-items:flex-start} }
 
 .card{
-  background: linear-gradient(180deg, rgba(255,255,255,.03), transparent 30%) , var(--card);
+  background: var(--card);
   border:1px solid var(--border);
   border-radius:18px;
   padding:16px;
-  box-shadow: 0 10px 30px rgba(0,0,0,.35);
+  box-shadow: 0 10px 30px rgba(17,24,39,.08);
 }
+
 
 .cardHead{display:flex;justify-content:space-between;align-items:center;gap:12px}
 .legend{display:flex;gap:10px;align-items:center;color:var(--muted);font-size:13px}
@@ -49,19 +53,21 @@ h1{margin:0;font-size:28px}
   gap:8px;
   padding:10px 14px;
   border-radius:12px;
-  border:1px solid rgba(124,92,255,.35);
-  background: rgba(124,92,255,.22);
-  color:var(--text);
+  border:1px solid rgba(99,91,255,.35);
+  background: rgba(99,91,255,.14);
+  color: var(--text);
   text-decoration:none;
   cursor:pointer;
   font-weight:600;
 }
 .btn:disabled{opacity:.5;cursor:not-allowed}
+
 .btn.ghost{
-  background: rgba(255,255,255,.03);
+  background: #ffffff;
   border:1px solid var(--border);
-  color:var(--text);
+  color: var(--text);
 }
+
 
 .muted{color:var(--muted)}
 .small{font-size:12px;line-height:1.35}
@@ -108,11 +114,39 @@ h1{margin:0;font-size:28px}
 
 /* FullCalendar styling tweaks */
 .fc .fc-toolbar-title{font-size:16px}
-.fc .fc-button{border-radius:10px;border:1px solid var(--border);background:rgba(255,255,255,.03)}
+.fc .fc-button{
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:#fff;
+  color: var(--text);
+}
 .fc .fc-button-primary:not(:disabled).fc-button-active,
-.fc .fc-button-primary:not(:disabled):active{background:rgba(124,92,255,.28);border-color:rgba(124,92,255,.35)}
-.fc .fc-daygrid-day-number{color:var(--muted)}
-.fc .fc-day-today{background:rgba(124,92,255,.08)}
+.fc .fc-button-primary:not(:disabled):active{
+  background: rgba(99,91,255,.14);
+  border-color: rgba(99,91,255,.35);
+  color: var(--text);
+}
+.fc .fc-daygrid-day-number{color: var(--muted)}
+.fc .fc-day-today{background: rgba(99,91,255,.08)}
+
+/* ===== Form fields (light theme) ===== */
+input, select, textarea{
+  width:100%;
+  margin-top:6px;
+  padding:10px 12px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:#ffffff;
+  color:var(--text);
+  outline:none;
+  font-size:14px;
+}
+
+input:focus, select:focus, textarea:focus{
+  border-color: rgba(99,91,255,.45);
+  box-shadow: 0 0 0 4px rgba(99,91,255,.12);
+}
+
 
 /* booked background events */
-.booked-bg{ background: rgba(255,85,102,.25) !important; }
+.booked-bg{ background: rgba(225,29,72,.18) !important; }
