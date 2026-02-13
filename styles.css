@@ -129,7 +129,15 @@ h1{margin:0;font-size:34px}
 .fc .fc-daygrid-day-number{color: var(--muted)}
 .fc .fc-day-today{background: rgba(99,91,255,.08)}
 
-/* Price / labels in day cell */
+/* Make range selection clearly visible */
+.fc .fc-highlight{
+  background: rgba(99,91,255,.18) !important;
+}
+.fc .fc-daygrid-day.fc-day-selected{
+  background: rgba(99,91,255,.12) !important;
+}
+
+/* Price/labels */
 .dayPrice{
   font-size: 11px;
   margin-top: 2px;
@@ -141,6 +149,7 @@ h1{margin:0;font-size:34px}
 .dayBookedLabel{
   color: #b42318 !important;
   font-weight: 800;
+  letter-spacing: .2px;
 }
 
 /* Past day label */
@@ -149,15 +158,16 @@ h1{margin:0;font-size:34px}
 }
 
 /* Past days look disabled */
-.fc .fc-day-past{
-  background: rgba(17,24,39,.03);
+.fc .fc-day-past,
+.fc .is-past{
+  background: rgba(17,24,39,.03) !important;
   opacity: .65;
 }
 .fc .fc-day-past .fc-daygrid-day-frame{
   cursor: not-allowed;
 }
 
-/* Make booked day cell background red-ish (uses :has, works in modern browsers) */
-.fc .fc-daygrid-day:has(.dayBookedLabel){
-  background: rgba(225,29,72,.06);
+/* Booked days red-ish background */
+.fc .is-booked{
+  background: rgba(225,29,72,.07) !important;
 }
