@@ -1,15 +1,15 @@
 :root{
-  --bg:#f6f7fb;              /* общий фон */
-  --card:#ffffff;            /* карточки */
-  --muted:#5b6477;           /* вторичный текст */
-  --text:#111827;            /* основной текст */
-  --accent:#635bff;          /* акцент (кнопки/выделения) */
+  --bg:#f6f7fb;
+  --card:#ffffff;
+  --muted:#5b6477;
+  --text:#111827;
+  --accent:#635bff;
   --border:rgba(17,24,39,.10);
-  --danger:#e11d48;          /* занятые даты */
+  --danger:#e11d48;
 }
 
-
 *{box-sizing:border-box}
+
 body{
   margin:0;
   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
@@ -20,13 +20,13 @@ body{
   color:var(--text);
 }
 
-
 .wrap{max-width:1100px;margin:0 auto;padding:20px}
 .header{display:flex;gap:16px;justify-content:space-between;align-items:flex-start}
-h1{margin:0;font-size:28px}
+.titleBlock{max-width:720px}
+h1{margin:0;font-size:34px}
 .sub{margin:6px 0 0;color:var(--muted)}
 .right{display:flex;flex-direction:column;gap:10px;align-items:flex-end}
-.lang, .contacts{display:flex;gap:10px;flex-wrap:wrap}
+.lang,.contacts{display:flex;gap:10px;flex-wrap:wrap}
 
 .grid{display:grid;grid-template-columns: 1.2fr .8fr;gap:16px}
 @media (max-width: 940px){ .grid{grid-template-columns:1fr} .right{align-items:flex-start} }
@@ -39,11 +39,11 @@ h1{margin:0;font-size:28px}
   box-shadow: 0 10px 30px rgba(17,24,39,.08);
 }
 
-
 .cardHead{display:flex;justify-content:space-between;align-items:center;gap:12px}
+
 .legend{display:flex;gap:10px;align-items:center;color:var(--muted);font-size:13px}
 .dot{width:10px;height:10px;border-radius:999px;display:inline-block}
-.dot.free{background:rgba(124,92,255,.9)}
+.dot.free{background:rgba(99,91,255,.9)}
 .dot.booked{background:var(--danger)}
 
 .btn{
@@ -63,11 +63,10 @@ h1{margin:0;font-size:28px}
 .btn:disabled{opacity:.5;cursor:not-allowed}
 
 .btn.ghost{
-  background: #ffffff;
+  background:#ffffff;
   border:1px solid var(--border);
   color: var(--text);
 }
-
 
 .muted{color:var(--muted)}
 .small{font-size:12px;line-height:1.35}
@@ -75,18 +74,19 @@ h1{margin:0;font-size:28px}
 .formNote{
   margin-top:12px;
   padding:10px 12px;
-  border:1px dashed rgba(255,255,255,.18);
+  border:1px dashed rgba(17,24,39,.18);
   border-radius:12px;
   color:var(--muted);
+  background: rgba(17,24,39,.02);
 }
 
 .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
 .footer{color:var(--muted);font-size:12px;opacity:.9}
 
-.about .badges{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 6px}
+.badges{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 6px}
 .badge{
   border:1px solid var(--border);
-  background: rgba(255,255,255,.03);
+  background: rgba(17,24,39,.02);
   padding:6px 10px;
   border-radius:999px;
   font-size:12px;
@@ -100,19 +100,19 @@ h1{margin:0;font-size:28px}
 
 .ph{
   border:1px solid var(--border);
-  background: rgba(255,255,255,.03);
+  background: rgba(17,24,39,.02);
   border-radius:14px;
   aspect-ratio: 4/3;
   display:flex;
   align-items:center;
   justify-content:center;
-  color: rgba(238,242,255,.55);
+  color: rgba(17,24,39,.45);
   font-size:13px;
   overflow:hidden;
 }
 .ph img{width:100%;height:100%;object-fit:cover;display:block}
 
-/* FullCalendar styling tweaks */
+/* FullCalendar styling */
 .fc .fc-toolbar-title{font-size:16px}
 .fc .fc-button{
   border-radius:10px;
@@ -129,90 +129,35 @@ h1{margin:0;font-size:28px}
 .fc .fc-daygrid-day-number{color: var(--muted)}
 .fc .fc-day-today{background: rgba(99,91,255,.08)}
 
-/* ===== Form fields (light theme) ===== */
-input, select, textarea{
-  width:100%;
-  margin-top:6px;
-  padding:10px 12px;
-  border-radius:12px;
-  border:1px solid var(--border);
-  background:#ffffff;
-  color:var(--text);
-  outline:none;
-  font-size:14px;
-}
-
-input:focus, select:focus, textarea:focus{
-  border-color: rgba(99,91,255,.45);
-  box-shadow: 0 0 0 4px rgba(99,91,255,.12);
-}
+/* Price / labels in day cell */
 .dayPrice{
   font-size: 11px;
   margin-top: 2px;
-  color: rgba(17,24,39,.55);   /* нормальная читаемость на светлой теме */
   line-height: 1.1;
+  color: rgba(17,24,39,.55);
 }
 
-/* когда день выбран/подсвечен — делаем цену чуть контрастнее */
-.fc .fc-daygrid-day.fc-day-selected .dayPrice,
-.fc .fc-daygrid-day:hover .dayPrice{
-  color: rgba(17,24,39,.75) !important;
-}
-
-
-/* booked background events */
-.fc .fc-bg-event.booked-bg {
-  background: rgba(225,29,72,.18) !important;
-  opacity: 1 !important;
-  /* ===== Booked as text badge inside day cell ===== */
-
-/* Убираем маркер/точку события в month view */
-.fc .fc-daygrid-event-dot {
-  display: none !important;
-}
-
-/* Убираем лишние обёртки/фон у события, делаем его "бейджиком" */
-.fc .fc-daygrid-event.booked-event {
-  margin: 2px 2px 0 2px !important;
-  padding: 0 !important;
-  border: 0 !important;
-  background: transparent !important;
-  box-shadow: none !important;
-}
-
-/* Главная часть события */
-.fc .fc-daygrid-event.booked-event .fc-event-main {
-  padding: 0 !important;
-}
-
-/* Время события (если вдруг появляется) — скрыть */
-.fc .fc-daygrid-event.booked-event .fc-event-time {
-  display: none !important;
-}
-
-/* Сам текст "Booked" как бейдж */
-.fc .fc-daygrid-event.booked-event .fc-event-title {
-  display: inline-block !important;
-  padding: 2px 6px !important;
-  border-radius: 999px !important;
-  font-size: 11px !important;
-  line-height: 1.2 !important;
-  font-weight: 600 !important;
-  white-space: nowrap !important;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
-
-  /* единый цвет */
+/* BOOKED label */
+.dayBookedLabel{
   color: #b42318 !important;
-  background: rgba(225, 29, 72, .12) !important;
-  border: 1px solid rgba(225, 29, 72, .18) !important;
+  font-weight: 800;
 }
 
-/* чтобы "Booked" не ломал высоту дня */
-.fc .fc-daygrid-day-events {
-  min-height: 18px;
+/* Past day label */
+.dayPastLabel{
+  color: rgba(17,24,39,.25) !important;
 }
 
+/* Past days look disabled */
+.fc .fc-day-past{
+  background: rgba(17,24,39,.03);
+  opacity: .65;
+}
+.fc .fc-day-past .fc-daygrid-day-frame{
+  cursor: not-allowed;
 }
 
-
+/* Make booked day cell background red-ish (uses :has, works in modern browsers) */
+.fc .fc-daygrid-day:has(.dayBookedLabel){
+  background: rgba(225,29,72,.06);
+}
