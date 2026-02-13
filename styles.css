@@ -171,3 +171,35 @@ h1{margin:0;font-size:34px}
 .fc .is-booked{
   background: rgba(225,29,72,.07) !important;
 }
+/* 1) Нормальная подсветка выбранного диапазона */
+.fc .fc-highlight {
+  background: rgba(99,91,255,.18) !important;
+}
+.fc .fc-daygrid-day.fc-day-selected {
+  background: rgba(99,91,255,.12) !important;
+}
+
+/* 2) Booked фон от background events */
+.fc .fc-bg-event.booked-bg {
+  background: rgba(225,29,72,.12) !important;
+  opacity: 1 !important;
+}
+
+/* 3) Booked ячейка (класс ставим через dayCellDidMount) */
+.fc .is-booked {
+  background: rgba(225,29,72,.07) !important;
+}
+
+/* 4) Прошлые дни */
+.fc .is-past,
+.fc .fc-day-past {
+  background: rgba(17,24,39,.03) !important;
+  opacity: .65;
+}
+
+/* 5) Текст “ЗАНЯТО/BOOKED” */
+.dayBookedLabel{
+  color: #b42318 !important;
+  font-weight: 800;
+}
+
