@@ -160,18 +160,23 @@ function initCalendar() {
 
     // запрет выбора на занятые диапазоны (подстраховка)
     selectAllow: function(selectInfo) {
-      const start = selectInfo.start;
-      const end = selectInfo.end;
-      const events = calendar.getEvents();
-      for (const e of events) {
-        if (e.display === "background") {
-          const es = e.start;
-          const ee = e.end;
-          if (start < ee && end > es) return false;
-        }
-      }
-      return true;
-    },
+  const start = selectInfo.start;
+  const end = selectInfo.end; // exclusive
+  const events = calendar.getEvents();
+
+  for (const e of events) {
+    // блокируем пересечения с забронированными событиями
+    if (e.classNames && e.classNames.includes("booked-event")) {
+      const es = e.start;
+      const ee = e.end || addDays(e.start, 1); // на всякий, если end отсутствует
+
+      // пересечение диапазонов: [start,end) и [es,ee)
+      if (start < ee && end > es) return false;
+    }
+  }
+  return true;
+},
+      
 
     // отображение цены прямо в ячейке (маленькой строкой)
     dayCellContent: function(arg) {
@@ -191,15 +196,33 @@ priceEl.textContent = price ? `${Math.round(price)}${CURRENCY}` : "";
     },
 
     select: function(info) {
-      const startISO = info.startStr.slice(0,10);
-      const endISO = info.endStr.slice(0,10); // end exclusive = дата выезда
-      const { nights, total } = computeStay(startISO, endISO);
+  // safety: если пересеклось с booked — отменяем
+  const start = info.start;
+  const end = info.end; // exclusive
 
-      selected = { startISO, endISO, nights, total };
-      $("selectionInfo").textContent = selectionText();
-      $("btnBook").disabled = !(nights > 0);
+  for (const e of calendar.getEvents()) {
+    if (e.classNames && e.classNames.includes("booked-event")) {
+      const es = e.start;
+      const ee = e.end || addDays(e.start, 1);
+
+      // пересечение диапазонов: [start,end) и [es,ee)
+      if (start < ee && end > es) {
+        calendar.unselect();
+        clearSelection();
+        return;
+      }
     }
-  });
+  }
+
+  const startISO = info.startStr.slice(0, 10);
+  const endISO = info.endStr.slice(0, 10); // end exclusive = дата выезда
+  const { nights, total } = computeStay(startISO, endISO);
+
+  selected = { startISO, endISO, nights, total };
+  $("selectionInfo").textContent = selectionText();
+  $("btnBook").disabled = !(nights > 0);
+},
+
 
   calendar.render();
 }
@@ -253,5 +276,6 @@ function init() {
 }
 
 init();
+
 
 
