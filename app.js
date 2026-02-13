@@ -2,13 +2,21 @@ let lang = "ru";
 let selected = null; // { startISO, endISO, nights, total }
 let calendar = null;
 
+let bookedDays = new Set(); // 'YYYY-MM-DD' for each booked day
+
 const $ = (id) => document.getElementById(id);
 
 function setLang(next) {
   lang = next;
   renderText();
   renderGallery();
-  if (calendar) calendar.setOption("locale", lang === "ru" ? "ru" : "en-gb");
+
+  if (calendar) {
+    calendar.setOption("locale", lang === "ru" ? "ru" : "en-gb");
+    // перерисуем даты, чтобы "ЗАНЯТО/BOOKED" обновился
+    calendar.render();
+  }
+
   $("selectionInfo").textContent = selected ? selectionText() : CONTENT[lang].chooseDates;
 }
 
@@ -31,10 +39,14 @@ function addDays(date, days) {
   d.setDate(d.getDate() + days);
   return d;
 }
+function startOfDay(date) {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+}
 function isWeekend(date) {
   const wd = date.getDay(); // 0 Sun, 6 Sat
   return wd === 0 || wd === 6;
 }
+
 function getPriceForDay(dayISO) {
   const override = PRICE_OVERRIDES[dayISO];
   let p = override != null ? override : DEFAULT_PRICE;
@@ -43,6 +55,7 @@ function getPriceForDay(dayISO) {
   }
   return p;
 }
+
 function computeStay(startISO, endISOExclusive) {
   const start = parseISO(startISO);
   const end = parseISO(endISOExclusive);
@@ -123,28 +136,35 @@ function renderGallery() {
   });
 }
 
-// Хотим "Booked" текстом (обычное событие)
-function makeBookedEvent(eventData) {
-  return {
-    title: "Booked",
-    start: eventData.start,
-    end: eventData.end,
-    allDay: true,
-    display: "auto",
-    classNames: ["booked-event"],
-  };
+// События Google Calendar используем ТОЛЬКО чтобы заполнить bookedDays.
+// На экране события не показываем.
+function collectBookedDaysFromEvent(eventData) {
+  const start = eventData.start ? startOfDay(eventData.start) : null;
+  const end = eventData.end ? startOfDay(eventData.end) : addDays(start, 1); // end exclusive
+
+  if (!start) return;
+
+  let d = new Date(start);
+  while (d < end) {
+    bookedDays.add(iso(d));
+    d = addDays(d, 1);
+  }
 }
 
-function selectionOverlapsBooked(start, end) {
-  // start/end: Date, end is exclusive
-  for (const e of calendar.getEvents()) {
-    if (e.classNames && e.classNames.includes("booked-event")) {
-      const es = e.start;
-      const ee = e.end || addDays(e.start, 1);
-      if (start < ee && end > es) return true;
-    }
+function rangeHasBooked(startDate, endDateExclusive) {
+  let d = startOfDay(startDate);
+  const end = startOfDay(endDateExclusive);
+
+  while (d < end) {
+    if (bookedDays.has(iso(d))) return true;
+    d = addDays(d, 1);
   }
   return false;
+}
+
+function isRangeInPast(startDate) {
+  const today = startOfDay(new Date());
+  return startOfDay(startDate) < today;
 }
 
 function initCalendar() {
@@ -158,23 +178,45 @@ function initCalendar() {
     selectMirror: true,
     locale: lang === "ru" ? "ru" : "en-gb",
 
+    // показывать/выбирать только начиная с сегодняшней даты
+    validRange: function (nowDate) {
+      return { start: startOfDay(nowDate) };
+    },
+
     // Google Calendar source
     googleCalendarApiKey: GOOGLE_API_KEY,
     events: {
       googleCalendarId: GOOGLE_CALENDAR_ID,
     },
 
-    // Превращаем любые события из Google Calendar в "Booked" event
+    // собираем bookedDays из событий и скрываем их
     eventDataTransform: function (eventData) {
-      return makeBookedEvent(eventData);
+      collectBookedDaysFromEvent(eventData);
+      return {
+        title: "",
+        start: eventData.start,
+        end: eventData.end,
+        allDay: true,
+        display: "none", // не рисуем полоски событий
+      };
     },
 
-    // Запрет выбора, если выделение пересекает booked
+    // когда события догрузились — перерисуем даты, чтобы "ЗАНЯТО/BOOKED" появилось в ячейках
+    loading: function (isLoading) {
+      if (!isLoading) {
+        // перерисовать сетку (dayCellContent снова выполнится)
+        calendar.render();
+      }
+    },
+
+    // запрет выбора: прошлое + пересечение с bookedDays
     selectAllow: function (selectInfo) {
-      return !selectionOverlapsBooked(selectInfo.start, selectInfo.end);
+      if (isRangeInPast(selectInfo.start)) return false;
+      if (rangeHasBooked(selectInfo.start, selectInfo.end)) return false;
+      return true;
     },
 
-    // Цена в ячейке
+    // цена/занято в ячейке
     dayCellContent: function (arg) {
       const container = document.createElement("div");
 
@@ -182,19 +224,33 @@ function initCalendar() {
       num.textContent = arg.dayNumberText;
       num.style.opacity = "0.9";
 
-      const price = getPriceForDay(iso(arg.date));
-      const priceEl = document.createElement("div");
-      priceEl.className = "dayPrice";
-      priceEl.textContent = price ? `${Math.round(price)}${CURRENCY}` : "";
+      const dayISO = iso(arg.date);
+      const label = document.createElement("div");
+      label.className = "dayPrice";
+
+      const today = startOfDay(new Date());
+      const cellDay = startOfDay(arg.date);
+      const isPast = cellDay < today;
+
+      if (bookedDays.has(dayISO)) {
+        label.classList.add("dayBookedLabel");
+        label.textContent = lang === "ru" ? "ЗАНЯТО" : "BOOKED";
+      } else if (isPast) {
+        label.classList.add("dayPastLabel");
+        label.textContent = ""; // можно поставить "—", если хочешь
+      } else {
+        const price = getPriceForDay(dayISO);
+        label.textContent = price ? `${Math.round(price)}${CURRENCY}` : "";
+      }
 
       container.appendChild(num);
-      container.appendChild(priceEl);
+      container.appendChild(label);
       return { domNodes: [container] };
     },
 
-    // Если вдруг что-то проскочит — отменим выделение
+    // финальная защита (на случай если что-то изменилось после allow)
     select: function (info) {
-      if (selectionOverlapsBooked(info.start, info.end)) {
+      if (isRangeInPast(info.start) || rangeHasBooked(info.start, info.end)) {
         calendar.unselect();
         clearSelection();
         return;
