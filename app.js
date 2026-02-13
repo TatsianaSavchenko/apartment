@@ -9,7 +9,6 @@ function setLang(next) {
   renderText();
   renderGallery();
   if (calendar) calendar.setOption("locale", lang === "ru" ? "ru" : "en-gb");
-  // перерисуем подсказку выбора дат:
   $("selectionInfo").textContent = selected ? selectionText() : CONTENT[lang].chooseDates;
 }
 
@@ -24,8 +23,8 @@ function iso(date) {
   return `${y}-${m}-${d}`;
 }
 function parseISO(s) {
-  const [y,m,d] = s.split("-").map(Number);
-  return new Date(y, m-1, d);
+  const [y, m, d] = s.split("-").map(Number);
+  return new Date(y, m - 1, d);
 }
 function addDays(date, days) {
   const d = new Date(date);
@@ -47,18 +46,19 @@ function getPriceForDay(dayISO) {
 function computeStay(startISO, endISOExclusive) {
   const start = parseISO(startISO);
   const end = parseISO(endISOExclusive);
-  const nights = Math.max(0, Math.round((end - start) / (1000*60*60*24)));
+  const nights = Math.max(0, Math.round((end - start) / (1000 * 60 * 60 * 24)));
   let total = 0;
-  for (let i=0;i<nights;i++){
+  for (let i = 0; i < nights; i++) {
     total += getPriceForDay(iso(addDays(start, i)));
   }
   return { nights, total };
 }
 
 function selectionText() {
-  const t = CONTENT[lang];
   const total = fmtMoney(selected.total);
-  if (lang === "ru") return `Даты: ${selected.startISO} → ${selected.endISO} (выезд) • Ночей: ${selected.nights} • Итого: ${total}`;
+  if (lang === "ru") {
+    return `Даты: ${selected.startISO} → ${selected.endISO} (выезд) • Ночей: ${selected.nights} • Итого: ${total}`;
+  }
   return `Dates: ${selected.startISO} → ${selected.endISO} (check-out) • Nights: ${selected.nights} • Total: ${total}`;
 }
 
@@ -82,7 +82,7 @@ function renderText() {
   $("btnClear").textContent = t.clearBtn;
 
   $("t_badges").innerHTML = "";
-  t.badges.forEach(b => {
+  t.badges.forEach((b) => {
     const el = document.createElement("span");
     el.className = "badge";
     el.textContent = b;
@@ -93,7 +93,7 @@ function renderText() {
 
   $("t_rules").textContent = t.rulesTitle;
   $("t_rules_list").innerHTML = "";
-  t.rules.forEach(r => {
+  t.rules.forEach((r) => {
     const li = document.createElement("li");
     li.textContent = r;
     $("t_rules_list").appendChild(li);
@@ -104,7 +104,7 @@ function renderGallery() {
   const g = $("gallery");
   g.innerHTML = "";
   if (!PHOTOS.length) {
-    for (let i=0;i<3;i++){
+    for (let i = 0; i < 3; i++) {
       const ph = document.createElement("div");
       ph.className = "ph";
       ph.textContent = lang === "ru" ? "Фото скоро будет" : "Photo coming soon";
@@ -112,7 +112,7 @@ function renderGallery() {
     }
     return;
   }
-  PHOTOS.forEach(src => {
+  PHOTOS.forEach((src) => {
     const ph = document.createElement("div");
     ph.className = "ph";
     const img = document.createElement("img");
@@ -123,16 +123,28 @@ function renderGallery() {
   });
 }
 
-// Делаем события из Google Calendar “фоном” = занято
-function makeBookedBg(eventData) {
+// Хотим "Booked" текстом (обычное событие)
+function makeBookedEvent(eventData) {
   return {
     title: "Booked",
     start: eventData.start,
     end: eventData.end,
     allDay: true,
-    display: "auto",                 // обычное событие
-    classNames: ["booked-event"]
+    display: "auto",
+    classNames: ["booked-event"],
   };
+}
+
+function selectionOverlapsBooked(start, end) {
+  // start/end: Date, end is exclusive
+  for (const e of calendar.getEvents()) {
+    if (e.classNames && e.classNames.includes("booked-event")) {
+      const es = e.start;
+      const ee = e.end || addDays(e.start, 1);
+      if (start < ee && end > es) return true;
+    }
+  }
+  return false;
 }
 
 function initCalendar() {
@@ -149,80 +161,54 @@ function initCalendar() {
     // Google Calendar source
     googleCalendarApiKey: GOOGLE_API_KEY,
     events: {
-      googleCalendarId: GOOGLE_CALENDAR_ID
+      googleCalendarId: GOOGLE_CALENDAR_ID,
     },
 
-    // превратим любые события календаря в background "занято"
-    eventDataTransform: function(eventData) {
-      // ВАЖНО: для all-day событий Google обычно end = следующий день — это то, что нам и надо
-      return makeBookedBg(eventData);
+    // Превращаем любые события из Google Calendar в "Booked" event
+    eventDataTransform: function (eventData) {
+      return makeBookedEvent(eventData);
     },
 
-    // запрет выбора на занятые диапазоны (подстраховка)
-    selectAllow: function(selectInfo) {
-  const start = selectInfo.start;
-  const end = selectInfo.end; // exclusive
-  const events = calendar.getEvents();
+    // Запрет выбора, если выделение пересекает booked
+    selectAllow: function (selectInfo) {
+      return !selectionOverlapsBooked(selectInfo.start, selectInfo.end);
+    },
 
-  for (const e of events) {
-    // блокируем пересечения с забронированными событиями
-    if (e.classNames && e.classNames.includes("booked-event")) {
-      const es = e.start;
-      const ee = e.end || addDays(e.start, 1); // на всякий, если end отсутствует
-
-      // пересечение диапазонов: [start,end) и [es,ee)
-      if (start < ee && end > es) return false;
-    }
-  }
-  return true;
-},
-      
-
-    // отображение цены прямо в ячейке (маленькой строкой)
-    dayCellContent: function(arg) {
+    // Цена в ячейке
+    dayCellContent: function (arg) {
       const container = document.createElement("div");
+
       const num = document.createElement("div");
       num.textContent = arg.dayNumberText;
       num.style.opacity = "0.9";
 
       const price = getPriceForDay(iso(arg.date));
       const priceEl = document.createElement("div");
-priceEl.className = "dayPrice";
-priceEl.textContent = price ? `${Math.round(price)}${CURRENCY}` : "";
+      priceEl.className = "dayPrice";
+      priceEl.textContent = price ? `${Math.round(price)}${CURRENCY}` : "";
 
       container.appendChild(num);
       container.appendChild(priceEl);
       return { domNodes: [container] };
     },
 
-    select: function(info) {
-  // safety: если пересеклось с booked — отменяем
-  const start = info.start;
-  const end = info.end; // exclusive
-
-  for (const e of calendar.getEvents()) {
-    if (e.classNames && e.classNames.includes("booked-event")) {
-      const es = e.start;
-      const ee = e.end || addDays(e.start, 1);
-
-      // пересечение диапазонов: [start,end) и [es,ee)
-      if (start < ee && end > es) {
+    // Если вдруг что-то проскочит — отменим выделение
+    select: function (info) {
+      if (selectionOverlapsBooked(info.start, info.end)) {
         calendar.unselect();
         clearSelection();
         return;
       }
-    }
-  }
 
-  const startISO = info.startStr.slice(0, 10);
-  const endISO = info.endStr.slice(0, 10); // end exclusive = дата выезда
-  const { nights, total } = computeStay(startISO, endISO);
+      const startISO = info.startStr.slice(0, 10);
+      const endISO = info.endStr.slice(0, 10); // end exclusive = дата выезда
+      const { nights, total } = computeStay(startISO, endISO);
 
-  selected = { startISO, endISO, nights, total };
-  $("selectionInfo").textContent = selectionText();
-  $("btnBook").disabled = !(nights > 0);
-},
-
+      selected = { startISO, endISO, nights, total };
+      $("selectionInfo").textContent = selectionText();
+      $("btnBook").disabled = !(nights > 0);
+    },
+  });
 
   calendar.render();
 }
@@ -234,21 +220,19 @@ function buildMessage() {
     start: selected.startISO,
     end: selected.endISO,
     nights: selected.nights,
-    total
+    total,
   });
 }
 
 function openMessengerChooser() {
   const msg = encodeURIComponent(buildMessage());
-
-  // маленький "выбор": если оба — предложим 2 ссылки
   const tgUrl = `https://t.me/${TELEGRAM_USERNAME}?text=${msg}`;
   const waUrl = `https://wa.me/${WHATSAPP_PHONE}?text=${msg}`;
 
-  // супер-простой UX: если на мобиле — покажем confirm
-  const useTg = confirm(lang === "ru"
-    ? "Открыть Telegram? (Отмена = WhatsApp)"
-    : "Open Telegram? (Cancel = WhatsApp)"
+  const useTg = confirm(
+    lang === "ru"
+      ? "Открыть Telegram? (Отмена = WhatsApp)"
+      : "Open Telegram? (Cancel = WhatsApp)"
   );
 
   window.open(useTg ? tgUrl : waUrl, "_blank", "noopener");
@@ -276,6 +260,3 @@ function init() {
 }
 
 init();
-
-
-
