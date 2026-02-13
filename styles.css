@@ -146,7 +146,23 @@ input:focus, select:focus, textarea:focus{
   border-color: rgba(99,91,255,.45);
   box-shadow: 0 0 0 4px rgba(99,91,255,.12);
 }
+.dayPrice{
+  font-size: 11px;
+  margin-top: 2px;
+  color: rgba(17,24,39,.55);   /* нормальная читаемость на светлой теме */
+  line-height: 1.1;
+}
+
+/* когда день выбран/подсвечен — делаем цену чуть контрастнее */
+.fc .fc-daygrid-day.fc-day-selected .dayPrice,
+.fc .fc-daygrid-day:hover .dayPrice{
+  color: rgba(17,24,39,.75) !important;
+}
 
 
 /* booked background events */
-.booked-bg{ background: rgba(225,29,72,.18) !important; }
+.fc .fc-bg-event.booked-bg {
+  background: rgba(225,29,72,.18) !important;
+  opacity: 1 !important;
+}
+
