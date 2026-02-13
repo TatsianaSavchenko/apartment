@@ -127,11 +127,11 @@ function renderGallery() {
 function makeBookedBg(eventData) {
   return {
     title: "Booked",
-    start: eventData.start,     // ISO
-    end: eventData.end,         // ISO
+    start: eventData.start,
+    end: eventData.end,
     allDay: true,
-    display: "background",
-    classNames: ["booked-bg"]
+    display: "auto",                 // обычное событие
+    classNames: ["booked-event"]
   };
 }
 
@@ -253,4 +253,5 @@ function init() {
 }
 
 init();
+
 
