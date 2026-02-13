@@ -182,10 +182,8 @@ function initCalendar() {
 
       const price = getPriceForDay(iso(arg.date));
       const priceEl = document.createElement("div");
-      priceEl.style.fontSize = "11px";
-      priceEl.style.marginTop = "2px";
-      priceEl.style.color = "rgba(238,242,255,.65)";
-      priceEl.textContent = price ? `${Math.round(price)}${CURRENCY}` : "";
+priceEl.className = "dayPrice";
+priceEl.textContent = price ? `${Math.round(price)}${CURRENCY}` : "";
 
       container.appendChild(num);
       container.appendChild(priceEl);
@@ -255,3 +253,4 @@ function init() {
 }
 
 init();
+
