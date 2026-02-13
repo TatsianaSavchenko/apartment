@@ -203,3 +203,38 @@ h1{margin:0;font-size:34px}
   font-weight: 800;
 }
 
+
+/* Visible range selection */
+.fc .fc-highlight{
+  background: rgba(99,91,255,.18) !important;
+}
+.fc .fc-daygrid-day.fc-day-selected{
+  background: rgba(99,91,255,.12) !important;
+}
+
+/* Background events for booked ranges */
+.fc .fc-bg-event.booked-bg{
+  background: rgba(225,29,72,.14) !important;
+  opacity: 1 !important;
+}
+
+/* Cell-level booked highlighting */
+.fc .is-booked{
+  background: rgba(225,29,72,.08) !important;
+}
+
+/* Past days disabled look */
+.fc .is-past,
+.fc .fc-day-past{
+  background: rgba(17,24,39,.03) !important;
+  opacity: .65;
+}
+.fc .is-past .fc-daygrid-day-frame{
+  cursor: not-allowed;
+}
+
+/* Booked label */
+.dayBookedLabel{
+  color: #b42318 !important;
+  font-weight: 800;
+}
