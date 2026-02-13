@@ -164,5 +164,55 @@ input:focus, select:focus, textarea:focus{
 .fc .fc-bg-event.booked-bg {
   background: rgba(225,29,72,.18) !important;
   opacity: 1 !important;
+  /* ===== Booked as text badge inside day cell ===== */
+
+/* Убираем маркер/точку события в month view */
+.fc .fc-daygrid-event-dot {
+  display: none !important;
 }
+
+/* Убираем лишние обёртки/фон у события, делаем его "бейджиком" */
+.fc .fc-daygrid-event.booked-event {
+  margin: 2px 2px 0 2px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Главная часть события */
+.fc .fc-daygrid-event.booked-event .fc-event-main {
+  padding: 0 !important;
+}
+
+/* Время события (если вдруг появляется) — скрыть */
+.fc .fc-daygrid-event.booked-event .fc-event-time {
+  display: none !important;
+}
+
+/* Сам текст "Booked" как бейдж */
+.fc .fc-daygrid-event.booked-event .fc-event-title {
+  display: inline-block !important;
+  padding: 2px 6px !important;
+  border-radius: 999px !important;
+  font-size: 11px !important;
+  line-height: 1.2 !important;
+  font-weight: 600 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+
+  /* единый цвет */
+  color: #b42318 !important;
+  background: rgba(225, 29, 72, .12) !important;
+  border: 1px solid rgba(225, 29, 72, .18) !important;
+}
+
+/* чтобы "Booked" не ломал высоту дня */
+.fc .fc-daygrid-day-events {
+  min-height: 18px;
+}
+
+}
+
 
