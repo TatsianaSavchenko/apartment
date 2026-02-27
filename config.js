@@ -44,7 +44,6 @@ const CONTENT = {
     sub: "Pick dates in the calendar → send a pre-booking request via messenger.",
     about: "About the apartment",
     photos: "Photos",
-    photosHint: "You can add photos later — just upload files and they’ll appear here.",
     calendar: "Calendar",
     free: "available",
     booked: "booked",
@@ -53,7 +52,7 @@ const CONTENT = {
     clearBtn: "Clear",
     chooseDates: "Select dates in the calendar — summary will appear here.",
     rulesTitle: "Rules",
-    badges: ["👤 up to 3 guests", "🛏 1 bedroom", "9️⃣ floor" "📶 Wi-Fi", "❄️ A/C"],
+    badges: ["👤 up to 3 guests", "🛏 1 bedroom", "9️⃣ floor", "📶 Wi-Fi", "❄️ A/C"],
     desc: "Cozy apartment located at 15G Sherif Khimshiashvili St. in Batumi, just a 3-minute walk to the beach. Balcony with sea view. The apartment includes a kitchen with a large refrigerator and microwave, one double bed, a sofa bed, air conditioning, Wi-Fi, Smart TV, bathroom with bathtub, and washing machine.",
     rules: ["Check-in: 14:00", "Check-out: 12:00", "No parties", "Deposit is required"],
     msgTemplate: ({start, end, nights, total}) =>
@@ -72,6 +71,7 @@ const PHOTOS = [
  "photos/6.jpg",
  "photos/7.jpg",
 ];
+
 
 
 
