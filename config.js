@@ -21,7 +21,7 @@ const PRICE_OVERRIDES = {
 // ==== 4) ТЕКСТЫ (RU / EN) ====
 const CONTENT = {
   ru: {
-    title: "Квартира для аренды",
+    title: "Уютная квартира с видом на море",
     sub: "Выберите даты в календаре → отправьте предбронь в мессенджер.",
     about: "О квартире",
     photos: "Фото",
@@ -34,9 +34,9 @@ const CONTENT = {
     clearBtn: "Сбросить",
     chooseDates: "Выберите даты в календаре — и тут появится итог.",
     rulesTitle: "Условия",
-    badges: ["👤 до 4 гостей", "🛏 1 спальня", "📶 Wi-Fi", "❄️ кондиционер"],
-    desc: "Короткое описание квартиры (потом поменяешь на своё): район, близость к морю/центру, удобства и т.д.",
-    rules: ["Заезд: 14:00", "Выезд: 12:00", "Без вечеринок", "Залог по договорённости"],
+    badges: ["👤 до 3 гостей", "🔑 Квартира-студия", "🛏 1 кровать и 🛋 1 раскладывающийся диван  ", "9️⃣ этаж", "📶 Wi-Fi", "❄️ кондиционер"],
+    desc: "Квартира находится на ул. Шериф Химшиашвили 15G (апартамент 901), всего 3 минуты пешком до моря. Балкон с видом на море. В квартире: кухня с большим холодильником и микроволновкой, двуспальная кровать, раскладывающийся диван, кондиционер, Wi-Fi, Smart TV, ванная комната с ванной и стиральной машиной",
+    rules: ["Заезд: 14:00", "Выезд: 12:00", "Без вечеринок", "Залог обязателен"],
     msgTemplate: ({start, end, nights, total}) =>
       `Здравствуйте! Хочу забронировать квартиру.\nДаты: ${start} → ${end} (выезд)\nНочей: ${nights}\nИтого: ${total}\n`
   },
@@ -54,9 +54,9 @@ const CONTENT = {
     clearBtn: "Clear",
     chooseDates: "Select dates in the calendar — summary will appear here.",
     rulesTitle: "Rules",
-    badges: ["👤 up to 4 guests", "🛏 1 bedroom", "📶 Wi-Fi", "❄️ A/C"],
-    desc: "Short apartment description (you’ll replace it later): area, distance to sea/center, amenities, etc.",
-    rules: ["Check-in: 14:00", "Check-out: 12:00", "No parties", "Deposit on request"],
+    badges: ["👤 up to 3 guests", "🛏 1 bedroom", "📶 Wi-Fi", "❄️ A/C"],
+    desc: "Cozy apartment located at 15G Sherif Khimshiashvili St (apt. 901), just a 3-minute walk to the beach. Balcony with sea view. The apartment includes a kitchen with a large refrigerator and microwave, one double bed, a sofa bed, air conditioning, Wi-Fi, Smart TV, bathroom with bathtub, and washing machine.",
+    rules: ["Check-in: 14:00", "Check-out: 12:00", "No parties", "Deposit is required"],
     msgTemplate: ({start, end, nights, total}) =>
       `Hello! I'd like to book the apartment.\nDates: ${start} → ${end} (check-out)\nNights: ${nights}\nTotal: ${total}\n`
   }
@@ -69,4 +69,5 @@ const PHOTOS = [
   // "photos/2.jpg",
   // "photos/3.jpg",
 ];
+
 
