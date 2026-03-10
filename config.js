@@ -1,6 +1,6 @@
 // ==== 1) МЕССЕНДЖЕРЫ (обязательно) ====
 const TELEGRAM_USERNAME = "tonysav25";   // без @
-const WHATSAPP_PHONE    = "995599688762";    // международный формат, без +
+const WHATSAPP_PHONE    = "375445808978";    // международный формат, без +
 
 /*
  ==== 2) GOOGLE CALENDAR (обязательно) ====
@@ -71,6 +71,7 @@ const PHOTOS = [
  "photos/6.jpg",
  "photos/7.jpg",
 ];
+
 
 
 
