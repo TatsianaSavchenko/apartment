@@ -221,7 +221,15 @@ function clearSelection(){
   $("btnBook").disabled=true;
   if(calendar) calendar.unselect();
 }
-
+function setLang(newLang){
+  lang = newLang;
+  renderText();
+  renderGallery();
+  if(calendar) {
+    calendar.changeLocale(newLang === "ru" ? "ru" : "en-gb");
+  }
+  $(selectionInfo).textContent = CONTENT[lang].chooseDates;
+}
 function init(){
   messengerLinks();
   renderText();
@@ -237,3 +245,4 @@ function init(){
 }
 
 init();
+
