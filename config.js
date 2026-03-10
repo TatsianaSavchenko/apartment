@@ -21,8 +21,8 @@ const PRICE_OVERRIDES = {
 // ==== 4) ТЕКСТЫ (RU / EN) ====
 const CONTENT = {
   ru: {
-    title: "Уютная квартира с видом на море в Батуми",
-    sub: "Выберите даты в календаре → отправьте предбронь в мессенджер.",
+    title: "Квартира у моря в Батуми",
+    sub: "Выберите даты в календаре → отправьте заявку в Telegram или WhatsApp",
     about: "О квартире",
     photos: "Фото",
     calendar: "Календарь",
@@ -34,8 +34,8 @@ const CONTENT = {
     chooseDates: "Выберите даты в календаре — и тут появится итог.",
     rulesTitle: "Условия",
     badges: ["👤 до 3 гостей", "🔑 Квартира-студия", "🛏 1 кровать и 🛋 1 раскладывающийся диван  ", "9️⃣ этаж", "📶 Wi-Fi", "❄️ кондиционер"],
-    desc: "Квартира находится на ул. Шериф Химшиашвили 15G в Батуми, всего 3 минуты пешком до моря. Балкон с видом на море. В квартире: кухня с посудой, большим холодильником и микроволновкой, двуспальная кровать, раскладывающийся диван, кондиционер, Wi-Fi, Smart TV, ванная комната с ванной и сушильно-стиральной машиной",
-    rules: ["Заезд: 14:00", "Выезд: 12:00", "Без вечеринок", "Залог обязателен"],
+    desc: "ул. Шериф Химшиашвили 15G, Батуми, всего 3 минуты пешком до моря. Балкон с видом на море. В квартире: кухня с посудой, большим холодильником и микроволновкой, двуспальная кровать, раскладывающийся диван, кондиционер, Wi-Fi, Smart TV, ванная комната с ванной и сушильно-стиральной машиной",
+    rules: ["Заезд: 14:00", "Выезд: 12:00", "Предоплата за 1 сутки"],
     msgTemplate: ({start, end, nights, total}) =>
       `Здравствуйте! Хочу забронировать квартиру.\nДаты: ${start} → ${end} (выезд)\nНочей: ${nights}\nИтого: ${total}\n`
   },
@@ -54,7 +54,7 @@ const CONTENT = {
     rulesTitle: "Rules",
     badges: ["👤 up to 3 guests", "🛏 1 bedroom", "9️⃣ floor", "📶 Wi-Fi", "❄️ A/C"],
     desc: "Cozy apartment located at 15G Sherif Khimshiashvili St. in Batumi, just a 3-minute walk to the beach. Balcony with sea view. The apartment includes a kitchen with a large refrigerator and microwave, one double bed, a sofa bed, air conditioning, Wi-Fi, Smart TV, bathroom with bathtub, and washing machine.",
-    rules: ["Check-in: 14:00", "Check-out: 12:00", "No parties", "Deposit is required"],
+    rules: ["Check-in: 14:00", "Check-out: 12:00", "Deposit is required for 1 night"],
     msgTemplate: ({start, end, nights, total}) =>
       `Hello! I'd like to book the apartment.\nDates: ${start} → ${end} (check-out)\nNights: ${nights}\nTotal: ${total}\n`
   }
@@ -71,6 +71,7 @@ const PHOTOS = [
  "photos/6.jpg",
  "photos/7.jpg",
 ];
+
 
 
 
