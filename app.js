@@ -223,10 +223,9 @@ function clearSelection(){
 }
 function setLang(newLang){
   lang = newLang;
-  renderText();
-  renderGallery();
   if(calendar) {
-    calendar.changeLocale(newLang === "ru" ? "ru" : "en-gb");
+  calendar.setOption('locale', newLang === "ru" ? "ru" : "en-gb");
+}
   }
   $(selectionInfo).textContent = CONTENT[lang].chooseDates;
 }
@@ -245,4 +244,5 @@ function init(){
 }
 
 init();
+
 
